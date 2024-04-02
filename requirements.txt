@@ -1,4 +1,5 @@
 pydub
+fastapi
 Pillow==9.5.0
 pexels-api-py
 SpeechRecognition
