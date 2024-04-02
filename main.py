@@ -305,3 +305,6 @@ async def generate_video(text: str):
     file_object = open(video, "rb")
     return StreamingResponse(file_object, media_type="video/mp4")
 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
