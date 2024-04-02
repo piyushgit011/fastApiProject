@@ -15,8 +15,7 @@ import speech_recognition as sr
 import datetime
 from pydub import AudioSegment
 import os
-from concurrent.futures import ThreadPoolExecutor
-import functools
+
 
 app = FastAPI()
 executor = ThreadPoolExecutor()
@@ -296,21 +295,21 @@ async def root():
 @app.post("/generate_video")
 async def generate_video(text: str):
     # video = generate_video_from_text(text)
-    tasks = [
-        functools.partial(first),
-        functools.partial(second),
-        functools.partial(third),
-        functools.partial(fourth),
-        functools.partial(fifth),
-        functools.partial(sixth),
-        functools.partial(seventh),
-    ]
+    # video = generate_video_from_text(text)
 
-    # Submit the tasks to the thread pool executor
-    futures = [executor.submit(task) for task in tasks]
+    first()
 
-    # Wait for all tasks to complete
-    await asyncio.gather(*[future.result() for future in futures])
+    second()
+
+    third()
+
+    fourth()
+
+    fifth()
+
+    sixth()
+
+    seventh()
 
     # After all tasks are completed, generate the video file
     video = "output_video1.mp4"
