@@ -1,0 +1,6 @@
+pydub
+Pillow==9.5.0
+pexels-api-py
+SpeechRecognition
+moviepy==2.0.0.dev2
+pysrt==1.1.2
