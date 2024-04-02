@@ -294,3 +294,8 @@ async def say_hello(name: str):
 
     return {"message": f"Hello {name}"}
 first()
+second()
+third()
+fourth()
+fifth()
+sixth()
