@@ -276,8 +276,8 @@ def generate_srt_non_overlapping(text_chunks, audio_length, output_file='subtitl
             f.write(f"{start_time_str} --> {end_time_str}\n")
             f.write(f"{chunk}\n\n")
 
-def seventh(text):
-    #text = "In the ever-evolving landscape of finance, cryptocurrency emerges as a beacon of innovation, offering a unique blend of opportunity and challenge. As investors, we are at the forefront of a digital revolution, where the potential for significant returns goes hand in hand with volatility and risk. Cryptocurrency investment isn't just about buying digital assets; it's about understanding the technology that powers them and the market dynamics that influence their value. With thorough research, strategic planning, and a diversified portfolio, the adventurous investor can navigate this new terrain. The future of finance is unfolding before our eyes, and cryptocurrency stands at its heart. Embrace the opportunity to be part of this groundbreaking journey."
+def seventh():
+    text = "In the ever-evolving landscape of finance, cryptocurrency emerges as a beacon of innovation, offering a unique blend of opportunity and challenge. As investors, we are at the forefront of a digital revolution, where the potential for significant returns goes hand in hand with volatility and risk. Cryptocurrency investment isn't just about buying digital assets; it's about understanding the technology that powers them and the market dynamics that influence their value. With thorough research, strategic planning, and a diversified portfolio, the adventurous investor can navigate this new terrain. The future of finance is unfolding before our eyes, and cryptocurrency stands at its heart. Embrace the opportunity to be part of this groundbreaking journey."
     text_chunks = list(split_text(text))
     audio_length = 52  # Length of your audio in seconds
 
@@ -299,7 +299,7 @@ async def generate_video(text: str):
     fourth()
     fifth()
     sixth()
-    seventh(text)
+    seventh()
     # Return the video file as a streaming response
     video = "output_video1.mp4"
     file_object = open(video, "rb")
