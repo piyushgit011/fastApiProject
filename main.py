@@ -106,7 +106,7 @@ def third():
         id.append(search_videos['videos'][0]['id'])
         print(search_videos['videos'][0]['id'])
     print(id)
-    from pexelsapi.pexels import Pexels
+   # from pexelsapi.pexels import Pexels
     pexel = Pexels('VbzeAkZpankLKM0HPXTvbjzhRkxUl2jQdzhrKqsEJU7lemhk0JN4HQIq')
 
     for id in id:
