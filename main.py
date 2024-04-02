@@ -128,7 +128,7 @@ def trim_video(video_path, start_time, end_time, output_path,codec='libx264'):
     print(f"Error trimming video: {e}")
 
 def fourth():
-    video_path = "/content/6799742.mp4"
+    video_path = "6799742.mp4"
     start_time = 1  # in seconds
     end_time = 7  # in seconds
     output_path = "/content/"
@@ -208,7 +208,7 @@ def sixth():
     import moviepy.editor as mpe
 
     # Paths for your video and audio files
-    video_path = "/content/merged_video_for_youtube_shorts.mp4"
+    video_path = "merged_video_for_youtube_shorts.mp4"
     audio_path = "/content/Gold a precious meta (3).wav"
 
     # Load the video and audio files
@@ -233,7 +233,7 @@ def sixth():
     final_clip = video.set_audio(audio)
 
     # Specify the output path for the final video
-    output_path = "/content/output_video1.mp4"
+    output_path = "output_video1.mp4"
 
     # Write the final video file with specified codecs
     final_clip.write_videofile(output_path, codec="libx264", audio_codec="aac")
