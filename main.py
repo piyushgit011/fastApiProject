@@ -15,10 +15,17 @@ import speech_recognition as sr
 import datetime
 from pydub import AudioSegment
 import os
+import time
+import rq
+from rq import Queue
+from redis import Redis
 
 
 app = FastAPI()
-executor = ThreadPoolExecutor()
+redis_conn = Redis()
+
+queue = Queue(connection=redis_conn)
+
 def round_time_to_nearest_second(milliseconds):
     # Convert milliseconds to seconds and round to the nearest whole number
     return int(round(milliseconds / 1000.0))
@@ -207,7 +214,7 @@ def fifth():
     # Write the result to a file, using a codec compatible with YouTube
     final_clip.write_videofile("merged_video_for_youtube_shorts.mp4", codec="libx264", fps=24)  # Specify fps if needed
 
-def sixth():
+def sixth(id):
     import moviepy.editor as mpe
 
     # Paths for your video and audio files
@@ -236,7 +243,7 @@ def sixth():
     final_clip = video.set_audio(audio)
 
     # Specify the output path for the final video
-    output_path = "output_video1.mp4"
+    output_path = f"output_video{id}.mp4"
 
     # Write the final video file with specified codecs
     final_clip.write_videofile(output_path, codec="libx264", audio_codec="aac")
@@ -291,30 +298,67 @@ def seventh():
 async def root():
     return {"message": "Hello World"}
 
-
-@app.post("/generate_video")
-async def generate_video(text: str):
-    # video = generate_video_from_text(text)
-    # video = generate_video_from_text(text)
-
+def generate_video(text: str):
     first()
-
     second()
-
     third()
-
     fourth()
-
     fifth()
-
-    sixth()
-
+    sixth(id)
     seventh()
 
-    # After all tasks are completed, generate the video file
-    video = "output_video1.mp4"
-    file_object = open(video, "rb")
-    return StreamingResponse(file_object, media_type="video/mp4")
+    # Generate the video file
+    video = f"output_video{id}.mp4"
+    return video
+
+@app.post("/generate_video")
+async def start_generate_video(text: str):
+    # Enqueue the generate_video function with the provided text
+    job = queue.enqueue(generate_video, text)
+    global id = job.id
+    return {"job_id": job.id}
+
+@app.get("/check_job/{job_id}")
+async def check_job_status(job_id: str):
+    # Fetch the job from the queue by its ID
+    job = rq.job.Job.fetch(job_id, connection=redis_conn)
+
+    # Check if the job is finished
+    if job.is_finished:
+        # If job is finished, return the generated video
+        video = f"output_video{job_id}.mp4"
+        file_object = open(video, "rb")
+        return StreamingResponse(file_object, media_type="video/mp4")
+    elif job.is_failed:
+        # If job failed, return an error message
+        return {"status": "failed", "message": "Video generation failed"}
+    else:
+        # If job is still in progress, return its status
+        return {"status": "in_progress"}
+
+# @app.post("/generate_video")
+# async def generate_video(text: str):
+#     # video = generate_video_from_text(text)
+#     # video = generate_video_from_text(text)
+
+#     first()
+
+#     second()
+
+#     third()
+
+#     fourth()
+
+#     fifth()
+
+#     sixth()
+
+#     seventh()
+
+#     # After all tasks are completed, generate the video file
+#     video = "output_video1.mp4"
+#     file_object = open(video, "rb")
+#     return StreamingResponse(file_object, media_type="video/mp4")
 
 if __name__ == "__main__":
     import uvicorn
