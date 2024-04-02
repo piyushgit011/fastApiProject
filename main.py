@@ -15,10 +15,11 @@ import speech_recognition as sr
 import datetime
 from pydub import AudioSegment
 import os
-
+from concurrent.futures import ThreadPoolExecutor
+import functools
 
 app = FastAPI()
-
+executor = ThreadPoolExecutor()
 def round_time_to_nearest_second(milliseconds):
     # Convert milliseconds to seconds and round to the nearest whole number
     return int(round(milliseconds / 1000.0))
@@ -296,17 +297,20 @@ async def root():
 async def generate_video(text: str):
     # video = generate_video_from_text(text)
     tasks = [
-        first(),
-        second(),
-        third(),
-        fourth(),
-        fifth(),
-        sixth(),
-        seventh()
+        functools.partial(first),
+        functools.partial(second),
+        functools.partial(third),
+        functools.partial(fourth),
+        functools.partial(fifth),
+        functools.partial(sixth),
+        functools.partial(seventh),
     ]
 
-    # Run all tasks concurrently and wait for them to complete
-    await asyncio.gather(*tasks)
+    # Submit the tasks to the thread pool executor
+    futures = [executor.submit(task) for task in tasks]
+
+    # Wait for all tasks to complete
+    await asyncio.gather(*[future.result() for future in futures])
 
     # After all tasks are completed, generate the video file
     video = "output_video1.mp4"
