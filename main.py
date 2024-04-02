@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import StreamingResponse
+import asyncio
 from pydub import AudioSegment
 from pydub.silence import detect_nonsilent
 import math
@@ -294,14 +295,20 @@ async def root():
 @app.post("/generate_video")
 async def generate_video(text: str):
     # video = generate_video_from_text(text)
-    first()
-    second()
-    third()
-    fourth()
-    fifth()
-    sixth()
-    seventh()
-    # Return the video file as a streaming response
+    tasks = [
+        first(),
+        second(),
+        third(),
+        fourth(),
+        fifth(),
+        sixth(),
+        seventh()
+    ]
+
+    # Run all tasks concurrently and wait for them to complete
+    await asyncio.gather(*tasks)
+
+    # After all tasks are completed, generate the video file
     video = "output_video1.mp4"
     file_object = open(video, "rb")
     return StreamingResponse(file_object, media_type="video/mp4")
