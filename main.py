@@ -16,6 +16,7 @@ import datetime
 from pydub import AudioSegment
 import os
 import time
+from fastapi.responses import FileResponse
 # import rq
 # from rq import Queue
 # from redis import Redis
@@ -214,7 +215,7 @@ def fifth():
     # Write the result to a file, using a codec compatible with YouTube
     final_clip.write_videofile("merged_video_for_youtube_shorts.mp4", codec="libx264", fps=24)  # Specify fps if needed
 
-def sixth():
+def sixth(id):
     import moviepy.editor as mpe
 
     # Paths for your video and audio files
@@ -243,8 +244,8 @@ def sixth():
     final_clip = video.set_audio(audio)
 
     # Specify the output path for the final video
-    output_path = f"output_video1.mp4"
-
+    output_path = f"output_video{id}.mp4"
+ 
     # Write the final video file with specified codecs
     final_clip.write_videofile(output_path, codec="libx264", audio_codec="aac")
 
@@ -335,12 +336,21 @@ async def root():
 #     else:
 #         # If job is still in progress, return its status
 #         return {"status": "in_progress"}
+@app.post("/get_video")
+async def generate_video(ids :str):
+    # Return a pre-existing video file
+    video_path= f"output_video{ids}.mp4"
+    file = FileResponse(video_path, media_type="video/mp4")
+    os.remove(video_path)
+    return file
+
+
 
 @app.post("/generate_video")
-async def generate_video(text: str):
+async def generate_video(text: str,ids :str):
     # video = generate_video_from_text(text)
     # video = generate_video_from_text(text)
-
+    # prev_id = ids
     first()
 
     second()
@@ -351,14 +361,14 @@ async def generate_video(text: str):
 
     fifth()
 
-    sixth()
+    sixth(ids)
 
     seventh()
 
     # After all tasks are completed, generate the video file
-    video = "output_video1.mp4"
-    file_object = open(video, "rb")
-    return StreamingResponse(file_object, media_type="video/mp4")
+    # video = "output_video1.mp4"
+    # file_object = open(video, "rb")
+    return {"id": f"{ids}"}
 
 if __name__ == "__main__":
     import uvicorn
