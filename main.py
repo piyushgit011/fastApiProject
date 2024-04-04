@@ -214,7 +214,7 @@ def fifth():
     # Write the result to a file, using a codec compatible with YouTube
     final_clip.write_videofile("merged_video_for_youtube_shorts.mp4", codec="libx264", fps=24)  # Specify fps if needed
 
-def sixth(id):
+def sixth():
     import moviepy.editor as mpe
 
     # Paths for your video and audio files
@@ -243,7 +243,7 @@ def sixth(id):
     final_clip = video.set_audio(audio)
 
     # Specify the output path for the final video
-    output_path = f"output_video{id}.mp4"
+    output_path = f"output_video1.mp4"
 
     # Write the final video file with specified codecs
     final_clip.write_videofile(output_path, codec="libx264", audio_codec="aac")
