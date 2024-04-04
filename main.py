@@ -22,9 +22,9 @@ import time
 
 
 app = FastAPI()
-redis_conn = Redis()
+# redis_conn = Redis()
 
-queue = Queue(connection=redis_conn)
+# queue = Queue(connection=redis_conn)
 
 def round_time_to_nearest_second(milliseconds):
     # Convert milliseconds to seconds and round to the nearest whole number
