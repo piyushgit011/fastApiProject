@@ -36,7 +36,7 @@ def round_time_to_nearest_second(milliseconds):
 
 def first():
     #text = "In the ever-evolving landscape of finance, cryptocurrency emerges as a beacon of innovation, offering a unique blend of opportunity and challenge. As investors, we are at the forefront of a digital revolution, where the potential for significant returns goes hand in hand with volatility and risk. Cryptocurrency investment isn't just about buying digital assets; it's about understanding the technology that powers them and the market dynamics that influence their value. With thorough research, strategic planning, and a diversified portfolio, the adventurous investor can navigate this new terrain. The future of finance is unfolding before our eyes, and cryptocurrency stands at its heart. Embrace the opportunity to be part of this groundbreaking journey."
-    audio = AudioSegment.from_file("/content/ttsmaker-file-2024-4-5-22-12-59.mp3")
+    audio = AudioSegment.from_file("content/ttsmaker-file-2024-4-5-22-12-59.mp3")
     audio_length_seconds = len(audio) / 1000.0
 
     # Detect non-silent chunks
