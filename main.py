@@ -66,7 +66,7 @@ def first():
         segment.export(f"segment_adjusted_{i + 1}.mp3", format="mp3")
 
 def second():
-    audio = AudioSegment.from_file("/content/ttsmaker-file-2024-4-5-22-12-59.mp3")
+    audio = AudioSegment.from_file("content/ttsmaker-file-2024-4-5-22-12-59.mp3")
     audio_length_seconds = len(audio) / 1000.0
 
     # Detect non-silent chunks
