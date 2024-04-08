@@ -17,6 +17,9 @@ from pydub import AudioSegment
 import os
 import time
 from fastapi.responses import FileResponse
+import sys
+import pysrt
+from moviepy.editor import VideoFileClip, TextClip, CompositeVideoClip
 # import rq
 # from rq import Queue
 # from redis import Redis
@@ -33,7 +36,7 @@ def round_time_to_nearest_second(milliseconds):
 
 def first():
     #text = "In the ever-evolving landscape of finance, cryptocurrency emerges as a beacon of innovation, offering a unique blend of opportunity and challenge. As investors, we are at the forefront of a digital revolution, where the potential for significant returns goes hand in hand with volatility and risk. Cryptocurrency investment isn't just about buying digital assets; it's about understanding the technology that powers them and the market dynamics that influence their value. With thorough research, strategic planning, and a diversified portfolio, the adventurous investor can navigate this new terrain. The future of finance is unfolding before our eyes, and cryptocurrency stands at its heart. Embrace the opportunity to be part of this groundbreaking journey."
-    audio = AudioSegment.from_file("content/Gold a precious meta (3).wav")
+    audio = AudioSegment.from_file("/content/ttsmaker-file-2024-4-5-22-12-59.mp3")
     audio_length_seconds = len(audio) / 1000.0
 
     # Detect non-silent chunks
@@ -63,7 +66,7 @@ def first():
         segment.export(f"segment_adjusted_{i + 1}.mp3", format="mp3")
 
 def second():
-    audio = AudioSegment.from_file("content/Gold a precious meta (3).wav")
+    audio = AudioSegment.from_file("/content/ttsmaker-file-2024-4-5-22-12-59.mp3")
     audio_length_seconds = len(audio) / 1000.0
 
     # Detect non-silent chunks
@@ -95,21 +98,18 @@ def second():
     for i, (start_sec, end_sec) in enumerate(adjusted_chunks):
         print(f"Segment {i + 1}: Starts at {start_sec}s, Ends at {end_sec}s")
 
-    print(adjusted_chunks)
-
-def third():
-    segments = [(0, 11), (11, 21), (21, 32), (32, 41), (41, 48), (48, 53)]
+    return(adjusted_chunks)
+    
+def third(segments):
+    # segments = [(0, 11), (11, 21), (21, 32), (32, 41), (41, 48), (48, 53)]
     time_differences = [end - start for start, end in segments]
 
-    time_differences
-    keywords = ["Cryptocurrency", "Digital revolution", "Market dynamics", "Diversified portfolio", "Future finance",
-                "Embrace opportunity"]
+    keywords = ["Cryptocurrency"]
     pexel = Pexels('VbzeAkZpankLKM0HPXTvbjzhRkxUl2jQdzhrKqsEJU7lemhk0JN4HQIq')
-    keywords = ["Cryptocurrency", "Digital revolution", "Market dynamics", "Diversified portfolio", "Future finance",
-                "Embrace opportunity"]
-    dura = [11, 10, 11, 9, 7, 5]
+    
+    dura = time_differences
     id = []
-    i = 0;
+    i = 0
     for key in keywords:
         search_videos = pexel.search_videos(query=key, per_page=1)
         i = i + 1
@@ -118,37 +118,17 @@ def third():
         print(search_videos['videos'][0]['id'])
     print(id)
    # from pexelsapi.pexels import Pexels
-    pexel = Pexels('VbzeAkZpankLKM0HPXTvbjzhRkxUl2jQdzhrKqsEJU7lemhk0JN4HQIq')
-
     for id in id:
         url_video = 'https://www.pexels.com/video/' + str(id) + '/download'
         r = requests.get(url_video)
         with open(str(id) + '.mp4', 'wb') as outfile:
             outfile.write(r.content)
+    return {time:dura,id:id}
 
-def trim_video(video_path, start_time, end_time, output_path,codec='libx264'):
-  if not os.path.exists(video_path):
-    raise FileNotFoundError(f"Video file not found: {video_path}")
+def fourth(data):
 
-  try:
-    clip = VideoFileClip(video_path)
-    trimmed_clip = clip.subclip(start_time, end_time)
-    trimmed_clip.write_videofile(output_path)
-    print(f"Video trimmed successfully and saved to: {output_path}")
-  except Exception as e:
-    print(f"Error trimming video: {e}")
-
-def fourth():
-    video_path = "6799742.mp4"
-    start_time = 1  # in seconds
-    end_time = 7  # in seconds
-    output_path = "/content/"
-
-    trim_video(video_path, start_time, end_time, output_path)
-    ids = [5665495, 3163534, 6799742, 7322355, 7164240, 4873454]
-    times = [11, 10, 11, 9, 7, 5]
-
-    # Loop through each video ID and time
+    ids = data[id]
+    times = data[time]
     for i, (video_id, desired_time) in enumerate(zip(ids, times), start=1):
         # Load the video
         clip = VideoFileClip(f"{video_id}.mp4")
@@ -220,7 +200,7 @@ def sixth(id):
 
     # Paths for your video and audio files
     video_path = "merged_video_for_youtube_shorts.mp4"
-    audio_path = "content/Gold a precious meta (3).wav"
+    audio_path = "/content/ttsmaker-file-2024-4-5-22-12-59.mp3"
 
     # Load the video and audio files
     video = mpe.VideoFileClip(video_path)
@@ -287,13 +267,61 @@ def generate_srt_non_overlapping(text_chunks, audio_length, output_file='subtitl
             f.write(f"{chunk}\n\n")
 
 def seventh():
-    text = "In the ever-evolving landscape of finance, cryptocurrency emerges as a beacon of innovation, offering a unique blend of opportunity and challenge. As investors, we are at the forefront of a digital revolution, where the potential for significant returns goes hand in hand with volatility and risk. Cryptocurrency investment isn't just about buying digital assets; it's about understanding the technology that powers them and the market dynamics that influence their value. With thorough research, strategic planning, and a diversified portfolio, the adventurous investor can navigate this new terrain. The future of finance is unfolding before our eyes, and cryptocurrency stands at its heart. Embrace the opportunity to be part of this groundbreaking journey."
+    text = "In the ever-evolving landscape of finance, cryptocurrency emerges as a beacon of innovation, offering a unique blend of opportunity and challenge."
     text_chunks = list(split_text(text))
-    audio_length = 52  # Length of your audio in seconds
+    audio_length = 9  # Length of your audio in seconds
 
     print("Generating subtitles.srt...")
     generate_srt_non_overlapping(text_chunks, audio_length)
     print("Subtitles generated successfully!")
+
+def time_to_seconds(time_obj):
+    return time_obj.hours * 3600 + time_obj.minutes * 60 + time_obj.seconds + time_obj.milliseconds / 1000
+
+
+def create_subtitle_clips(subtitles, videosize, fontsize=75, font='Arial', color='white', font_path=None, debug=False):
+    subtitle_clips = []
+
+    for subtitle in subtitles:
+        start_time = time_to_seconds(subtitle.start)
+        end_time = time_to_seconds(subtitle.end)
+        duration = end_time - start_time
+
+        video_width, video_height = videosize
+
+        if font_path is not None:
+            text_clip = TextClip(subtitle.text, fontsize=fontsize, font=font_path, color=color, method='caption').set_start(start_time).set_duration(duration)
+        else:
+            text_clip = TextClip(subtitle.text, fontsize=fontsize, font=font, color=color, method='caption').set_start(start_time).set_duration(duration)
+
+        subtitle_x_position = 'center'
+        subtitle_y_position = video_height * 4 / 5
+
+        text_position = (subtitle_x_position, subtitle_y_position)
+        subtitle_clips.append(text_clip.set_position(text_position))
+
+    return subtitle_clips
+def eight():
+    srtfilename = "/content/subtitles.srt"
+    mp4filename = "/content/merged_video_for_youtube_shorts.mp4"
+    video = VideoFileClip(mp4filename)
+    subtitles = pysrt.open(srtfilename)
+    begin, end = mp4filename.split(".mp4")
+    output_video_file = begin + '_subtitled' + ".mp4"
+
+    print("Output file name: ", output_video_file)
+
+    # Path to custom font TTF file
+    custom_font_path = '/content/Montserrat-Bold.ttf'
+
+    # Create subtitle clips
+    subtitle_clips = create_subtitle_clips(subtitles, video.size, font_path=custom_font_path)
+
+    # Add subtitles to the video
+    final_video = CompositeVideoClip([video] + subtitle_clips)
+
+    # Write output video file
+    final_video.write_videofile(output_video_file)
 
 @app.get("/")
 async def root():
@@ -353,11 +381,11 @@ async def generate_video(text: str,ids :str):
     # prev_id = ids
     first()
 
-    second()
+    segments = second()
 
-    third()
+    objj = third(segments)
 
-    fourth()
+    fourth(objj)
 
     fifth()
 
