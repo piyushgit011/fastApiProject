@@ -195,12 +195,12 @@ def fifth():
     # Write the result to a file, using a codec compatible with YouTube
     final_clip.write_videofile("merged_video_for_youtube_shorts.mp4", codec="libx264", fps=24)  # Specify fps if needed
 
-def sixth(id):
+def sixth():
     import moviepy.editor as mpe
 
     # Paths for your video and audio files
     video_path = "merged_video_for_youtube_shorts.mp4"
-    audio_path = "/content/ttsmaker-file-2024-4-5-22-12-59.mp3"
+    audio_path = "content/ttsmaker-file-2024-4-5-22-12-59.mp3"
 
     # Load the video and audio files
     video = mpe.VideoFileClip(video_path)
@@ -224,7 +224,7 @@ def sixth(id):
     final_clip = video.set_audio(audio)
 
     # Specify the output path for the final video
-    output_path = f"output_video{id}.mp4"
+    output_path = f"output_video1.mp4"
  
     # Write the final video file with specified codecs
     final_clip.write_videofile(output_path, codec="libx264", audio_codec="aac")
@@ -302,8 +302,8 @@ def create_subtitle_clips(subtitles, videosize, fontsize=75, font='Arial', color
 
     return subtitle_clips
 def eight():
-    srtfilename = "/content/subtitles.srt"
-    mp4filename = "/content/merged_video_for_youtube_shorts.mp4"
+    srtfilename = "content/subtitles.srt"
+    mp4filename = "content/merged_video_for_youtube_shorts.mp4"
     video = VideoFileClip(mp4filename)
     subtitles = pysrt.open(srtfilename)
     begin, end = mp4filename.split(".mp4")
@@ -312,7 +312,7 @@ def eight():
     print("Output file name: ", output_video_file)
 
     # Path to custom font TTF file
-    custom_font_path = '/content/Montserrat-Bold.ttf'
+    custom_font_path = 'content/Montserrat-Bold.ttf'
 
     # Create subtitle clips
     subtitle_clips = create_subtitle_clips(subtitles, video.size, font_path=custom_font_path)
@@ -389,9 +389,11 @@ async def generate_video(text: str,ids :str):
 
     fifth()
 
-    sixth(ids)
+    sixth()
 
     seventh()
+
+    eight()
 
     # After all tasks are completed, generate the video file
     # video = "output_video1.mp4"
