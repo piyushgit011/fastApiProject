@@ -123,12 +123,12 @@ def third(segments):
         r = requests.get(url_video)
         with open(str(id) + '.mp4', 'wb') as outfile:
             outfile.write(r.content)
-    return {time:dura,id:id}
+    return {'time':dura,'id':id}
 
 def fourth(data):
 
-    ids = data[id]
-    times = data[time]
+    ids = data['id']
+    times = data['time']
     for i, (video_id, desired_time) in enumerate(zip(ids, times), start=1):
         # Load the video
         clip = VideoFileClip(f"{video_id}.mp4")
